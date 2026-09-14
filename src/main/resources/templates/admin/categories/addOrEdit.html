@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout-admin}">
+<head>
+    <title th:text="${category.isEdit} ? 'Chinh sua Danh muc' : 'Them moi Danh muc'">Quan ly Danh muc</title>
+</head>
+<body>
+<section layout:fragment="content">
+
+    <h2 th:text="${category.isEdit} ? 'Cap nhat Thong tin Danh muc' : 'Them moi Danh muc'"></h2>
+    <a th:href="@{/admin/categories}">Quay lai danh sach</a>
+
+    <form th:action="@{/admin/categories/saveOrUpdate}" th:object="${category}" method="post">
+
+        <!-- Hidden field co trang thai Them / Sua -->
+        <input type="hidden" th:field="*{isEdit}" />
+
+        <!-- Ma danh muc (chi hien thi khi cap nhat) -->
+        <div class="form-group" th:if="${category.isEdit}">
+            <label class="form-label">Ma danh muc (ID)</label>
+            <input type="text" th:field="*{categoryid}" class="form-control" readonly="readonly" />
+        </div>
+        <input type="hidden" th:unless="${category.isEdit}" th:field="*{categoryid}" />
+
+        <!-- Ten danh muc -->
+        <div class="form-group">
+            <label class="form-label">Ten danh muc (*)</label>
+            <input type="text" th:field="*{categoryname}" class="form-control"
+                   placeholder="Vi du: Dien tu, Thoi trang, Sach..." />
+            <div th:if="${#fields.hasErrors('categoryname')}" th:errors="*{categoryname}" class="form-error"></div>
+        </div>
+
+        <!-- Hinh anh danh muc -->
+        <div class="form-group">
+            <label class="form-label">Ten file anh / Duong dan hinh anh</label>
+            <input type="text" th:field="*{images}" class="form-control"
+                   placeholder="Vi du: avatar.jpg hoac URL hinh anh" />
+        </div>
+
+        <!-- Trang thai -->
+        <div class="form-group">
+            <label class="form-label">Trang thai hoat dong</label>
+            <select th:field="*{status}" class="form-select">
+                <option value="1">1 - Dang hoat dong</option>
+                <option value="0">0 - Tam khoa</option>
+            </select>
+        </div>
+
+        <!-- Cac nut hanh dong -->
+        <div class="form-actions">
+            <button type="submit" th:text="${category.isEdit} ? 'Cap nhat thay doi' : 'Luu Danh muc'"></button>
+            <a th:href="@{/admin/categories}">Huy bo</a>
+        </div>
+
+    </form>
+
+</section>
+</body>
+</html>

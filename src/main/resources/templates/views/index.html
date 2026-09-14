@@ -1,11 +1,15 @@
 <!DOCTYPE html>
-<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-  layout:decorate="~{layouts/layout-web.html}">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout-web}">
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
+    <title>Trang chu</title>
 </head>
 <body>
-<h1 layout:fragment="content">hello</h1>
+    <section layout:fragment="content">
+        <h1>He thong Quan ly Category Spring Boot</h1>
+        <p>Ung dung demo CRUD, Tim kiem va Phan trang su dung Spring Boot, Spring Data JPA, Thymeleaf va Thymeleaf Layout Dialect.</p>
+        <a th:href="@{/admin/categories}">Truy cap Quan ly Category</a>
+    </section>
 </body>
 </html>

@@ -1,14 +1,21 @@
 <!DOCTYPE html>
-<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
+    <meta charset="UTF-8">
+    <title>Web Portal</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        table { border-collapse: collapse; width: 100%; margin-top: 15px; }
+        table, th, td { border: 1px solid #333; }
+        th, td { padding: 8px 12px; text-align: left; }
+    </style>
 </head>
 <body>
-<header>
-<h1>My website header</h1></header>
-  <section layout:fragment="content">
-    <p>Page content goes here</p>
-    </section>
+    <div th:replace="~{fragments/header :: header}"></div>
+    <main layout:fragment="content">
+        <p>Noi dung...</p>
+    </main>
+    <div th:replace="~{fragments/footer :: footer}"></div>
 </body>
 </html>

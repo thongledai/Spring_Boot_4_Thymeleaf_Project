@@ -1,11 +1,15 @@
 <!DOCTYPE html>
-<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-  layout:decorate="~{layouts/layout-admin.html}">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout-admin}">
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
+    <title>Trang Quan tri Admin</title>
 </head>
 <body>
-<h1 layout:fragment="content">hello admin</h1>
+    <section layout:fragment="content">
+        <h1>Bang dieu khien Quan tri (Admin Dashboard)</h1>
+        <p>He thong quan ly Category voi Thymeleaf Layout Dialect.</p>
+        <a th:href="@{/admin/categories}">Danh sach &amp; Tim kiem Category</a>
+    </section>
 </body>
 </html>

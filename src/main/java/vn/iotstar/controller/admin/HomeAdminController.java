@@ -2,13 +2,14 @@ package vn.iotstar.controller.admin;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
+@RequestMapping("/admin")
 public class HomeAdminController {
 
-	@GetMapping({ "/admin/home", "/admin" })
+	@GetMapping({ "/home", "", "/" })
 	public String home() {
-		// return "web/home";
-		return "views/admin/index";
+		return "redirect:/admin/categories";
 	}
 }

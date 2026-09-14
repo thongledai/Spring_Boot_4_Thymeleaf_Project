@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout-admin}">
+<head>
+    <title>Danh sach Category</title>
+</head>
+<body>
+<section layout:fragment="content">
+
+    <h2>Danh sach Category</h2>
+    <p>
+        <a th:href="@{/admin/categories/add}">+ Them moi Category</a>
+    </p>
+
+    <!-- Thong bao phan hoi -->
+    <div th:if="${message != null}" class="alert alert-success" th:text="${message}"></div>
+    <div th:if="${errorMessage != null}" class="alert alert-danger" th:text="${errorMessage}"></div>
+
+    <!-- Thanh tim kiem -->
+    <div style="margin: 15px 0;">
+        <form th:action="@{/admin/categories/search}" method="get">
+            <input type="hidden" name="size" th:value="${size}" />
+            <input type="text" name="keyword" th:value="${keyword}" 
+                   placeholder="Nhap ten danh muc..." style="padding: 6px 10px; width: 300px;" />
+            <button type="submit" style="padding: 6px 12px;">Tim kiem</button>
+            <a th:if="${keyword != null && !keyword.isEmpty()}" th:href="@{/admin/categories}" style="margin-left: 10px;">Xoa loc</a>
+        </form>
+    </div>
+
+    <!-- Truong hop khong co du lieu -->
+    <div th:if="${categoryPage == null || !categoryPage.hasContent()}" class="alert alert-warning">
+        Khong tim thay danh muc nao!
+    </div>
+
+    <!-- Bang danh sach Category -->
+    <table th:if="${categoryPage != null && categoryPage.hasContent()}">
+        <thead>
+            <tr>
+                <th class="text-center" style="width: 50px;">STT</th>
+                <th style="width: 100px;">Mã Category</th>
+                <th class="text-center" style="width: 120px;">Hinh anh</th>
+                <th>Ten Category</th>
+                <th class="text-center" style="width: 120px;">Trang thai</th>
+                <th class="text-center" style="width: 150px;">Thao tac</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="category, iStat : ${categoryPage.content}">
+                <td class="text-center" th:text="${iStat.index + 1 + categoryPage.number * categoryPage.size}"></td>
+                <td th:text="${category.categoryid}"></td>
+                <td class="text-center">
+                    <!-- Anh xa anh categories thanh dogiadung.jpg hoac file anh chi dinh -->
+                    <img th:src="${category.images != null && !category.images.isEmpty() ? (category.images.startsWith('http') ? category.images : '/images/' + category.images) : '/images/dogiadung.jpg'}"
+                         alt="Do gia dung" width="70" height="70" style="object-fit: cover; border: 1px solid #ddd;"
+                         onerror="this.onerror=null; this.src='/images/dogiadung.jpg';" />
+                </td>
+                <td th:text="${category.categoryname}"></td>
+                <td class="text-center">
+                    <span th:if="${category.status == 1}" style="color: green; font-weight: bold;">Hoat dong</span>
+                    <span th:unless="${category.status == 1}" style="color: red; font-weight: bold;">Tam khoa</span>
+                </td>
+                <td class="text-center">
+                    <a th:href="@{/admin/categories/edit/{id}(id=${category.categoryid})}">Sua</a>
+                    |
+                    <a href="javascript:void(0);"
+                       th:data-id="${category.categoryid}"
+                       th:data-name="${category.categoryname}"
+                       onclick="confirmDelete(this.getAttribute('data-id'), this.getAttribute('data-name'));">Xoa</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- Thanh Phan Trang (Pagination) -->
+    <div th:if="${categoryPage != null && categoryPage.totalPages > 0}" style="margin-top: 15px;">
+        <p>Hien thi [[${categoryPage.numberOfElements}]] / [[${categoryPage.totalElements}]] danh muc - Trang [[${categoryPage.number + 1}]] / [[${categoryPage.totalPages}]]</p>
+
+        <ul class="pagination">
+            <!-- Nut Trang Dau -->
+            <li th:classappend="${categoryPage.number == 0} ? 'disabled'">
+                <a th:if="${categoryPage.number != 0}"
+                   th:href="@{/admin/categories/search(keyword=${keyword}, size=${categoryPage.size}, page=1)}">Dau</a>
+                <span th:if="${categoryPage.number == 0}">Dau</span>
+            </li>
+
+            <!-- Nut Trang Truoc -->
+            <li th:classappend="${categoryPage.number == 0} ? 'disabled'">
+                <a th:if="${categoryPage.number != 0}"
+                   th:href="@{/admin/categories/search(keyword=${keyword}, size=${categoryPage.size}, page=${categoryPage.number})}">Truoc</a>
+                <span th:if="${categoryPage.number == 0}">Truoc</span>
+            </li>
+
+            <!-- Danh sach cac so trang -->
+            <li th:each="pageNumber : ${pageNumbers}"
+                th:classappend="${pageNumber == categoryPage.number + 1} ? 'active'">
+                <a th:href="@{/admin/categories/search(keyword=${keyword}, size=${categoryPage.size}, page=${pageNumber})}"
+                   th:text="${pageNumber}"></a>
+            </li>
+
+            <!-- Nut Trang Sau -->
+            <li th:classappend="${categoryPage.number + 1 == categoryPage.totalPages} ? 'disabled'">
+                <a th:if="${categoryPage.number + 1 != categoryPage.totalPages}"
+                   th:href="@{/admin/categories/search(keyword=${keyword}, size=${categoryPage.size}, page=${categoryPage.number + 2})}">Sau</a>
+                <span th:if="${categoryPage.number + 1 == categoryPage.totalPages}">Sau</span>
+            </li>
+
+            <!-- Nut Trang Cuoi -->
+            <li th:classappend="${categoryPage.number + 1 == categoryPage.totalPages} ? 'disabled'">
+                <a th:if="${categoryPage.number + 1 != categoryPage.totalPages}"
+                   th:href="@{/admin/categories/search(keyword=${keyword}, size=${categoryPage.size}, page=${categoryPage.totalPages})}">Cuoi</a>
+                <span th:if="${categoryPage.number + 1 == categoryPage.totalPages}">Cuoi</span>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Script xac nhan xoa -->
+    <script th:inline="javascript">
+        function confirmDelete(id, name) {
+            if (confirm('Ban co chac chan muon xoa danh muc "' + name + '" (ID: ' + id + ') khong?')) {
+                window.location.href = '/admin/categories/delete/' + id;
+            }
+        }
+    </script>
+
+</section>
+</body>
+</html>

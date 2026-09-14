@@ -26,7 +26,7 @@ public class Category implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-//danh sách các thuộc tính
+	// danh sách các thuộc tính
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
